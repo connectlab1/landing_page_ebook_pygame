@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pygame Mastery - Domine a Criação de Jogos 2D em Python</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter e Orbitron para vibe Gamer/Tech -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            green: '#00FF88',
+                            cyan: '#00F0FF',
+                            purple: '#7000FF',
+                            dark: '#0A0C10',
+                            card: '#121620',
+                            border: '#1F293D'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Orbitron', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'neon-green': '0 0 25px rgba(0, 255, 136, 0.4)',
+                        'neon-cyan': '0 0 25px rgba(0, 240, 255, 0.4)',
+                        'neon-purple': '0 0 25px rgba(112, 0, 255, 0.4)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glow-text {
+            text-shadow: 0 0 12px rgba(0, 255, 136, 0.6);
+        }
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+        .animate-float {
+            animation: float 5s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(1deg); }
+        }
+    </style>
+</head>
+<body class="bg-brand-dark text-slate-200 font-sans antialiased selection:bg-brand-green selection:text-brand-dark">
+
+    <!-- HERO BACKGROUND GRID -->
+    <div class="fixed inset-0 bg-grid pointer-events-none z-0 opacity-70"></div>
+
+    <!-- NAVBAR -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-brand-dark/80 border-b border-brand-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- LOGO -->
+            <a href="#" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-purple via-brand-cyan to-brand-green p-[2px] transition duration-300 group-hover:scale-105">
+                    <div class="w-full h-full bg-brand-dark rounded-[10px] flex items-center justify-center">
+                        <i class="fa-solid fa-gamepad text-brand-green text-xl"></i>
+                    </div>
+                </div>
+                <span class="font-display font-extrabold text-xl tracking-wider text-white">PYGAME<span class="text-brand-green">.MASTERY</span></span>
+            </a>
+
+            <!-- NAV LINKS -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+                <a href="#diferenciais" class="hover:text-brand-green transition-colors">Por que o E-book?</a>
+                <a href="#conteudo" class="hover:text-brand-green transition-colors">O que aprenderá</a>
+                <a href="#projetos" class="hover:text-brand-green transition-colors">Projetos</a>
+                <a href="#garantia" class="hover:text-brand-green transition-colors">Garantia</a>
+                <a href="#faq" class="hover:text-brand-green transition-colors">Dúvidas</a>
+            </nav>
+
+            <!-- CTA HEADER -->
+            <a href="#oferta" class="relative inline-flex items-center justify-center px-6 py-2.5 rounded-full font-bold text-slate-900 bg-brand-green hover:bg-emerald-400 transition-all duration-300 shadow-neon-green hover:scale-105">
+                <span>Garantir meu E-book</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="relative z-10">
+
+        <!-- HERO SECTION -->
+        <section class="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden">
+            <!-- Glow FX -->
+            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-purple/20 rounded-full blur-[140px] pointer-events-none"></div>
+            <div class="absolute top-1/3 left-1/4 w-[350px] h-[350px] bg-brand-cyan/15 rounded-full blur-[100px] pointer-events-none"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+                    
+                    <!-- TEXTO HERO -->
+                    <div class="lg:col-span-7 text-center lg:text-left space-y-6">
+                        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-card border border-brand-green/30 text-brand-green text-xs sm:text-sm font-semibold tracking-wide">
+                            <span class="w-2 h-2 rounded-full bg-brand-green animate-ping"></span>
+                            GUIA PRÁTICO 100% ATUALIZADO
+                        </div>
+
+                        <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight tracking-tight">
+                            Transforme sua lógica em <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-green via-brand-cyan to-brand-purple glow-text">Jogos Reais</span> com Python
+                        </h1>
+
+                        <p class="text-slate-300 text-lg sm:text-xl max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+                            Domine o **Pygame** do zero até a publicação dos seus próprios jogos 2D. Um método direto ao ponto, com projetos práticos, arquitetura limpa e sem teorias infinitas.
+                        </p>
+
+                        <!-- HERO CTA & BADGES -->
+                        <div class="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                            <a href="#oferta" class="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-lg text-slate-900 bg-brand-green hover:bg-emerald-300 transition-all duration-300 shadow-neon-green hover:scale-105 text-center flex items-center justify-center gap-3 group">
+                                <span>Quero Começar Agora</span>
+                                <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="#projetos" class="w-full sm:w-auto px-6 py-4 rounded-xl font-semibold text-slate-300 bg-brand-card hover:bg-slate-800 border border-brand-border transition-all duration-300 text-center">
+                                Ver Projetos do E-book
+                            </a>
+                        </div>
+
+                        <!-- TRUST BADGES -->
+                        <div class="pt-6 border-t border-brand-border/60 grid grid-cols-3 gap-4 text-center lg:text-left">
+                            <div class="flex items-center justify-center lg:justify-start gap-2">
+                                <i class="fa-solid fa-shield-halved text-brand-cyan text-xl"></i>
+                                <span class="text-xs sm:text-sm text-slate-400 font-medium">7 Dias de Garantia</span>
+                            </div>
+                            <div class="flex items-center justify-center lg:justify-start gap-2">
+                                <i class="fa-solid fa-bolt text-brand-green text-xl"></i>
+                                <span class="text-xs sm:text-sm text-slate-400 font-medium">Acesso Imediato</span>
+                            </div>
+                            <div class="flex items-center justify-center lg:justify-start gap-2">
+                                <i class="fa-solid fa-code text-brand-purple text-xl"></i>
+                                <span class="text-xs sm:text-sm text-slate-400 font-medium">Código Fonte Incluído</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- MOCKUP E-BOOK VISUAL -->
+                    <div class="lg:col-span-5 flex justify-center">
+                        <div class="relative group animate-float">
+                            <!-- Glow effect behind book -->
+                            <div class="absolute -inset-1 bg-gradient-to-r from-brand-green via-brand-cyan to-brand-purple rounded-2xl blur-xl opacity-60 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+
+                            <!-- Mockup Container -->
+                            <div class="relative w-72 sm:w-80 lg:w-84 h-[420px] bg-gradient-to-b from-slate-900 to-brand-card rounded-2xl border-2 border-brand-green/40 p-6 flex flex-col justify-between shadow-2xl overflow-hidden">
+                                
+                                <!-- Decorative lines -->
+                                <div class="absolute -top-12 -right-12 w-32 h-32 bg-brand-green/10 rounded-full blur-2xl"></div>
+
+                                <div>
+                                    <div class="flex justify-between items-center mb-6">
+                                        <span class="text-xs font-display text-brand-cyan font-bold tracking-widest uppercase">E-book Digital</span>
+                                        <i class="fa-brands fa-python text-3xl text-brand-green"></i>
+                                    </div>
+                                    <h3 class="font-display text-2xl font-black text-white leading-snug">
+                                        DESENVOLVIMENTO DE JOGOS COM <span class="text-brand-green">PYGAME</span>
+                                    </h3>
+                                    <p class="text-slate-400 text-xs mt-2">Do Zero ao Seu Primeiro Jogo Completo em Python</p>
+                                </div>
+
+                                <!-- Center graphic -->
+                                <div class="my-auto py-6 flex justify-center items-center">
+                                    <div class="relative w-28 h-28 flex items-center justify-center bg-brand-dark rounded-xl border border-brand-cyan/30 shadow-inner">
+                                        <i class="fa-solid fa-gamepad text-5xl text-brand-green"></i>
+                                        <div class="absolute inset-0 bg-brand-green/10 rounded-xl animate-pulse"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Bottom info -->
+                                <div class="border-t border-brand-border pt-4 flex justify-between items-center text-xs text-slate-400">
+                                    <span>Edição 2026</span>
+                                    <span class="text-brand-green font-bold flex items-center gap-1">
+                                        <i class="fa-solid fa-check-circle"></i> Inclui Projetos
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- POR QUE ESTE E-BOOK É PARA VOCÊ? -->
+        <section id="diferenciais" class="py-20 bg-brand-dark/50 border-y border-brand-border/60">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-xs font-display text-brand-green uppercase tracking-widest font-bold mb-3">Diferenciais Exclusivos</h2>
+                    <p class="text-3xl sm:text-4xl font-display font-extrabold text-white">Por que este Guia é Diferente de Cursos Longos e Tutoriais Picados?</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Card 1 -->
+                    <div class="bg-brand-card p-8 rounded-2xl border border-brand-border hover:border-brand-green/50 transition-all duration-300 hover:-translate-y-1">
+                        <div class="w-12 h-12 rounded-xl bg-brand-green/10 flex items-center justify-center text-brand-green text-2xl mb-6">
+                            <i class="fa-solid fa-laptop-code"></i>
+                        </div>
+                        <h3 class="font-bold text-xl text-white mb-3">100% Prático e Direto</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">Chega de enrolação teórica sem fim. Cada capítulo traz exemplos de código aplicáveis para você ver seu jogo funcionando imediatamente.</p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-brand-card p-8 rounded-2xl border border-brand-border hover:border-brand-cyan/50 transition-all duration-300 hover:-translate-y-1">
+                        <div class="w-12 h-12 rounded-xl bg-brand-cyan/10 flex items-center justify-center text-brand-cyan text-2xl mb-6">
+                            <i class="fa-solid fa-vector-square"></i>
+                        </div>
+                        <h3 class="font-bold text-xl text-white mb-3">Física 2D & Colisões Simplificadas</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">Entenda a matemática por trás dos movimentos, vetores, gravidade, pulo e detecção de colisões sem dor de cabeça.</p>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="bg-brand-card p-8 rounded-2xl border border-brand-border hover:border-brand-purple/50 transition-all duration-300 hover:-translate-y-1">
+                        <div class="w-12 h-12 rounded-xl bg-brand-purple/10 flex items-center justify-center text-brand-purple text-2xl mb-6">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                        <h3 class="font-bold text-xl text-white mb-3">Arquitetura Limpa</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">Aprenda a estruturar seu projeto de forma profissional usando Orientação a Objetos (POO), Sprites e gerenciadores de telas.</p>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="bg-brand-card p-8 rounded-2xl border border-brand-border hover:border-brand-green/50 transition-all duration-300 hover:-translate-y-1">
+                        <div class="w-12 h-12 rounded-xl bg-brand-green/10 flex items-center justify-center text-brand-green text-2xl mb-6">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <h3 class="font-bold text-xl text-white mb-3">IA Básica para Inimigos</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">Crie inteligência para os inimigos te perseguirem, patrulharem plataformas e tomarem decisões dinâmicas.</p>
+                    </div>
+
+                    <!-- Card 5 -->
+                    <div class="bg-brand-card p-8 rounded-2xl border border-brand-border hover:border-brand-cyan/50 transition-all duration-300 hover:-translate-y-1">
+                        <div class="w-12 h-12 rounded-xl bg-brand-cyan/10 flex items-center justify-center text-brand-cyan text-2xl mb-6">
+                            <i class="fa-solid fa-file-export"></i>
+                        </div>
+                        <h3 class="font-bold text-xl text-white mb-3">Exportação para Executável (.exe)</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">Aprenda a transformar seus scripts Python em arquivos executáveis para que qualquer amigo possa jogar no Windows sem instalar nada.</p>
+                    </div>
+
+                    <!-- Card 6 -->
+                    <div class="bg-brand-card p-8 rounded-2xl border border-brand-border hover:border-brand-purple/50 transition-all duration-300 hover:-translate-y-1">
+                        <div class="w-12 h-12 rounded-xl bg-brand-purple/10 flex items-center justify-center text-brand-purple text-2xl mb-6">
+                            <i class="fa-solid fa-headset"></i>
+                        </div>
+                        <h3 class="font-bold text-xl text-white mb-3">Suporte a Áudio & VFX</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">Adicione trilha sonora, efeitos de som 8-bit, sistemas de partículas e efeitos visuais incríveis nos seus jogos.</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- O QUE VOÇÊ VAI APRENDER (GRADE DO E-BOOK) -->
+        <section id="conteudo" class="py-20 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-xs font-display text-brand-cyan uppercase tracking-widest font-bold mb-3">Grade Curricular</h2>
+                    <p class="text-3xl sm:text-4xl font-display font-extrabold text-white">O Passo a Passo do Conteúdo</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                    <!-- Módulo 1 -->
+                    <div class="bg-brand-card p-6 rounded-2xl border border-brand-border">
+                        <span class="text-xs font-bold text-brand-green uppercase tracking-wider">Módulo 01</span>
+                        <h4 class="text-lg font-bold text-white mt-1 mb-3">Fundamentos e Game Loop</h4>
+                        <ul class="space-y-2 text-sm text-slate-300">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-green text-xs"></i> Instalação e Configuração do Pygame</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-green text-xs"></i> Criando a Janela do Jogo e Sistema de FPS</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-green text-xs"></i> Entendendo a Estrutura do Game Loop</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-green text-xs"></i> Renderização de Formas e Cores</li>
+                        </ul>
+                    </div>
+
+                    <!-- Módulo 2 -->
+                    <div class="bg-brand-card p-6 rounded-2xl border border-brand-border">
+                        <span class="text-xs font-bold text-brand-cyan uppercase tracking-wider">Módulo 02</span>
+                        <h4 class="text-lg font-bold text-white mt-1 mb-3">Entradas e Controle do Jogador</h4>
+                        <ul class="space-y-2 text-sm text-slate-300">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-cyan text-xs"></i> Captura de Teclado, Mouse e Gamepad</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-cyan text-xs"></i> Movimentação Suave e Limites de Tela</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-cyan text-xs"></i> Sistema de Pulo com Gravidade Simples</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-cyan text-xs"></i> Tratamento de Eventos Personalizados</li>
+                        </ul>
+                    </div>
+
+                    <!-- Módulo 3 -->
+                    <div class="bg-brand-card p-6 rounded-2xl border border-brand-border">
+                        <span class="text-xs font-bold text-brand-purple uppercase tracking-wider">Módulo 03</span>
+                        <h4 class="text-lg font-bold text-white mt-1 mb-3">Sprites, Animações e Áudio</h4>
+                        <ul class="space-y-2 text-sm text-slate-300">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-purple text-xs"></i> Uso da Classe `pygame.sprite.Sprite`</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-purple text-xs"></i> Spritesheets e Animação por Frames</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-purple text-xs"></i> Tocando Músicas de Fundo e Efeitos Sonoros</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-purple text-xs"></i> Otimização de Performance de Imagens</li>
+                        </ul>
+                    </div>
+
+                    <!-- Módulo 4 -->
+                    <div class="bg-brand-card p-6 rounded-2xl border border-brand-border">
+                        <span class="text-xs font-bold text-brand-green uppercase tracking-wider">Módulo 04</span>
+                        <h4 class="text-lg font-bold text-white mt-1 mb-3">Física e Colisões Avançadas</h4>
+                        <ul class="space-y-2 text-sm text-slate-300">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-green text-xs"></i> Colisões por AABB (Retângulos) e Máscara</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-green text-xs"></i> Plataformas e Reação Física de Colisão</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-green text-xs"></i> Coleta de Itens e Power-ups</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-green text-xs"></i> Detecção Precisa Pixel a Pixel</li>
+                        </ul>
+                    </div>
+
+                    <!-- Módulo 5 -->
+                    <div class="bg-brand-card p-6 rounded-2xl border border-brand-border">
+                        <span class="text-xs font-bold text-brand-cyan uppercase tracking-wider">Módulo 05</span>
+                        <h4 class="text-lg font-bold text-white mt-1 mb-3">Interface, UI e Menus</h4>
+                        <ul class="space-y-2 text-sm text-slate-300">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-cyan text-xs"></i> Renderização de Textos e Fontes Customizadas</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-cyan text-xs"></i> Barram de Vida, Vidas e Pontuação (Score)</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-cyan text-xs"></i> Tela Inicial, Game Over e Pausa</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-cyan text-xs"></i> Salvamento Local de High Scores (JSON)</li>
+                        </ul>
+                    </div>
+
+                    <!-- Módulo 6 -->
+                    <div class="bg-brand-card p-6 rounded-2xl border border-brand-border">
+                        <span class="text-xs font-bold text-brand-purple uppercase tracking-wider">Módulo 06</span>
+                        <h4 class="text-lg font-bold text-white mt-1 mb-3">IA Inimiga & Projetos Finais</h4>
+                        <ul class="space-y-2 text-sm text-slate-300">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-purple text-xs"></i> Padrões de Patrulha e Perseguição</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-purple text-xs"></i> Criação Completa de Space Shooter</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-purple text-xs"></i> Criação Completa de Jogo de Plataforma 2D</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-purple text-xs"></i> Geração de Executável (.exe) Final</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJETOS PRÁTICOS SHOWCASE -->
+        <section id="projetos" class="py-20 bg-brand-dark/50 border-t border-brand-border/60">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-xs font-display text-brand-green uppercase tracking-widest font-bold mb-3">Mão na Massa</h2>
+                    <p class="text-3xl sm:text-4xl font-display font-extrabold text-white">Projetos Completos que Você Vai Construir</p>
+                    <p class="text-slate-400 mt-3">Você não apenas lerá código, mas construirá jogos jogáveis passo a passo do zero.</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    
+                    <!-- Projeto 1 -->
+                    <div class="bg-brand-card rounded-2xl border border-brand-border overflow-hidden group hover:border-brand-green/50 transition-all duration-300">
+                        <div class="h-48 bg-slate-900 relative flex items-center justify-center p-6 border-b border-brand-border">
+                            <!-- Visual Graphic -->
+                            <div class="w-full h-full bg-slate-950 rounded-xl border border-brand-green/20 p-4 flex flex-col justify-between relative overflow-hidden">
+                                <div class="flex justify-between items-center text-xs text-brand-green font-mono">
+                                    <span>SCORE: 0450</span>
+                                    <span>LIVES: ❤️❤️❤️</span>
+                                </div>
+                                <div class="flex justify-around items-center my-auto">
+                                    <i class="fa-solid fa-space-shuttle text-brand-cyan text-xl rotate-180"></i>
+                                    <i class="fa-solid fa-space-shuttle text-brand-cyan text-xl rotate-180"></i>
+                                </div>
+                                <div class="flex justify-center">
+                                    <i class="fa-solid fa-rocket text-brand-green text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs font-bold text-brand-green uppercase">Projeto 01</span>
+                            <h3 class="text-xl font-bold text-white mt-1 mb-2">Space Galaxy Shooter</h3>
+                            <p class="text-slate-400 text-sm">Naves inimigas, tiros com efeitos sonoros, sistema de vidas, score progressivo e chefão no final.</p>
+                        </div>
+                    </div>
+
+                    <!-- Projeto 2 -->
+                    <div class="bg-brand-card rounded-2xl border border-brand-border overflow-hidden group hover:border-brand-cyan/50 transition-all duration-300">
+                        <div class="h-48 bg-slate-900 relative flex items-center justify-center p-6 border-b border-brand-border">
+                            <!-- Visual Graphic -->
+                            <div class="w-full h-full bg-slate-950 rounded-xl border border-brand-cyan/20 p-4 flex flex-col justify-between relative overflow-hidden">
+                                <div class="flex justify-between items-center text-xs text-brand-cyan font-mono">
+                                    <span>STAGE 1-1</span>
+                                    <span>COINS: 12</span>
+                                </div>
+                                <div class="relative h-full flex items-end justify-between px-4 pb-2">
+                                    <div class="w-8 h-8 bg-brand-cyan/20 rounded border border-brand-cyan flex items-center justify-center">
+                                        <i class="fa-solid fa-user-ninja text-brand-cyan text-xs"></i>
+                                    </div>
+                                    <div class="w-full border-b-2 border-slate-700 mx-2"></div>
+                                    <div class="w-6 h-6 bg-amber-400/20 rounded-full border border-amber-400 flex items-center justify-center">
+                                        <i class="fa-solid fa-coins text-amber-400 text-xs"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs font-bold text-brand-cyan uppercase">Projeto 02</span>
+                            <h3 class="text-xl font-bold text-white mt-1 mb-2">Platformer 2D Ninja Run</h3>
+                            <p class="text-slate-400 text-sm">Jogo de plataforma com pulo duplo, detecção de chão, física de plataformas móveis e moedas coletáveis.</p>
+                        </div>
+                    </div>
+
+                    <!-- Projeto 3 -->
+                    <div class="bg-brand-card rounded-2xl border border-brand-border overflow-hidden group hover:border-brand-purple/50 transition-all duration-300">
+                        <div class="h-48 bg-slate-900 relative flex items-center justify-center p-6 border-b border-brand-border">
+                            <!-- Visual Graphic -->
+                            <div class="w-full h-full bg-slate-950 rounded-xl border border-brand-purple/20 p-4 flex flex-col justify-between relative overflow-hidden">
+                                <div class="flex justify-between items-center text-xs text-brand-purple font-mono">
+                                    <span>DUNGEON</span>
+                                    <span>HP: 100/100</span>
+                                </div>
+                                <div class="grid grid-cols-4 gap-2 my-auto text-center">
+                                    <div class="text-slate-700"><i class="fa-solid fa-tree"></i></div>
+                                    <div><i class="fa-solid fa-ghost text-red-400 animate-bounce"></i></div>
+                                    <div><i class="fa-solid fa-shield-cat text-brand-purple"></i></div>
+                                    <div class="text-slate-700"><i class="fa-solid fa-dungeon"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs font-bold text-brand-purple uppercase">Projeto 03</span>
+                            <h3 class="text-xl font-bold text-white mt-1 mb-2">Retro Dungeon Crawler</h3>
+                            <p class="text-slate-400 text-sm">Jogo estilo RPG top-down com movimentação em 8 direções, mapa baseado em matrizes e IA de inimigos perseguição.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO DE OFERTA ESPECIAL -->
+        <section id="oferta" class="py-20 relative overflow-hidden">
+            <!-- Glow background -->
+            <div class="absolute inset-0 bg-gradient-to-b from-brand-purple/10 via-brand-green/10 to-transparent pointer-events-none"></div>
+
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="bg-brand-card rounded-3xl border-2 border-brand-green/40 p-8 sm:p-12 shadow-neon-green relative">
+                    
+                    <!-- Tag Promocional -->
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-brand-green to-brand-cyan text-brand-dark px-6 py-1.5 rounded-full font-extrabold text-xs sm:text-sm uppercase tracking-wider shadow-md">
+                        OFERTA DE LANÇAMENTO COM 50% OFF
+                    </div>
+
+                    <div class="text-center space-y-4">
+                        <h2 class="font-display text-3xl sm:text-5xl font-black text-white">Comece a Criar Seus Jogos Hoje Mesmo!</h2>
+                        <p class="text-slate-300 text-base sm:text-lg">Receba acesso imediato ao e-book completo + todos os códigos-fonte e bônus exclusivos.</p>
+                    </div>
+
+                    <!-- Bônus Lista -->
+                    <div class="my-8 py-6 border-y border-brand-border/80 space-y-4">
+                        <h3 class="text-sm font-display text-brand-green uppercase font-bold tracking-wider mb-2 text-center sm:text-left">O que você leva no pacote:</h3>
+                        
+                        <div class="grid sm:grid-cols-2 gap-3 text-sm text-slate-200">
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-circle-check text-brand-green"></i>
+                                <span>E-book Completo Pygame Mastery (PDF)</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-circle-check text-brand-green"></i>
+                                <span>Código Fonte de Todos os 3 Jogos</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-circle-check text-brand-green"></i>
+                                <span>Guia de Exportação para .EXE</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-circle-check text-brand-green"></i>
+                                <span>Pacote de Assets Gratuitos (Sons e Sprites)</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-circle-check text-brand-green"></i>
+                                <span>Cheat Sheet de Comandos Pygame</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-circle-check text-brand-green"></i>
+                                <span>Atualizações Futuras Gratuitas</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PREÇO -->
+                    <div class="text-center space-y-2 mb-8">
+                        <p class="text-slate-400 line-through text-lg">De R$ 97,00</p>
+                        <div class="flex items-baseline justify-center gap-1">
+                            <span class="text-sm text-slate-300">Por apenas</span>
+                            <span class="font-display text-5xl sm:text-6xl font-black text-brand-green glow-text">R$ 47</span>
+                            <span class="text-sm text-slate-300">,00 à vista</span>
+                        </div>
+                        <p class="text-xs text-slate-400">ou em 5x de R$ 10,15 no cartão de crédito</p>
+                    </div>
+
+                    <!-- BOTÃO COMPRA -->
+                    <div class="space-y-4 text-center">
+                        <button onclick="simularCompra()" class="w-full py-5 rounded-2xl font-black text-xl text-slate-900 bg-brand-green hover:bg-emerald-300 transition-all duration-300 shadow-neon-green hover:scale-[1.02] flex items-center justify-center gap-3 cursor-pointer">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <span>COMPRAR AGORA COM DESCONTO</span>
+                        </button>
+                        
+                        <div class="flex items-center justify-center gap-6 text-xs text-slate-400 pt-2">
+                            <span><i class="fa-solid fa-lock text-brand-green"></i> Pagamento Seguro</span>
+                            <span><i class="fa-solid fa-bolt text-brand-cyan"></i> Envio Imediato por E-mail</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO DE GARANTIA -->
+        <section id="garantia" class="py-16 bg-brand-dark">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-brand-card/80 border border-brand-border rounded-2xl p-8 flex flex-col md:flex-row items-center gap-8">
+                    <div class="w-24 h-24 sm:w-32 sm:h-32 shrink-0 flex items-center justify-center bg-brand-green/10 rounded-full border-2 border-brand-green text-brand-green text-5xl sm:text-6xl">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div class="text-center md:text-left space-y-2">
+                        <h3 class="text-2xl font-bold text-white">Garantia Incondicional de 7 Dias</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            Leia o e-book, aplique o código e construa os projetos. Se por qualquer motivo você achar que o conteúdo não é para você ou não aprender nada, basta enviar uma mensagem dentro de 7 dias e devolveremos 100% do seu dinheiro. Sem perguntas e sem complicações.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ (PERGUNTAS FREQUENTES) -->
+        <section id="faq" class="py-20 bg-brand-dark/50 border-t border-brand-border/60">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-xs font-display text-brand-green uppercase tracking-widest font-bold mb-3">Tire Suas Dúvidas</h2>
+                    <p class="text-3xl sm:text-4xl font-display font-extrabold text-white">Perguntas Frequentes</p>
+                </div>
+
+                <!-- ACCORDION -->
+                <div class="space-y-4">
+                    
+                    <!-- Item 1 -->
+                    <div class="bg-brand-card border border-brand-border rounded-xl overflow-hidden transition-all duration-200">
+                        <button onclick="toggleFaq(this)" class="w-full p-6 text-left font-bold text-white flex justify-between items-center focus:outline-none">
+                            <span>Preciso ser um expert em Python para acompanhar o e-book?</span>
+                            <i class="fa-solid fa-chevron-down text-brand-green transition-transform duration-300"></i>
+                        </button>
+                        <div class="faq-content hidden px-6 pb-6 text-slate-300 text-sm leading-relaxed border-t border-brand-border/40 pt-4">
+                            Não! O e-book foi escrito para quem tem conhecimentos básicos de lógica de programação ou sintaxe inicial do Python (variáveis, loops e funções). O capítulo inicial faz uma revisão prática dos conceitos necessários.
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="bg-brand-card border border-brand-border rounded-xl overflow-hidden transition-all duration-200">
+                        <button onclick="toggleFaq(this)" class="w-full p-6 text-left font-bold text-white flex justify-between items-center focus:outline-none">
+                            <span>Como vou receber o material após o pagamento?</span>
+                            <i class="fa-solid fa-chevron-down text-brand-green transition-transform duration-300"></i>
+                        </button>
+                        <div class="faq-content hidden px-6 pb-6 text-slate-300 text-sm leading-relaxed border-t border-brand-border/40 pt-4">
+                            O envio é automático e imediato. Assim que o pagamento for confirmado, você receberá um link no seu e-mail cadastrado para baixar o PDF do E-book e o repositório com todos os códigos fontes e assets dos jogos.
+                        </div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="bg-brand-card border border-brand-border rounded-xl overflow-hidden transition-all duration-200">
+                        <button onclick="toggleFaq(this)" class="w-full p-6 text-left font-bold text-white flex justify-between items-center focus:outline-none">
+                            <span>O e-book funciona no Windows, Mac e Linux?</span>
+                            <i class="fa-solid fa-chevron-down text-brand-green transition-transform duration-300"></i>
+                        </button>
+                        <div class="faq-content hidden px-6 pb-6 text-slate-300 text-sm leading-relaxed border-t border-brand-border/40 pt-4">
+                            Sim! O Python e a biblioteca Pygame são multiplataforma. O código ensinado funciona identicamente nos três sistemas operacionais.
+                        </div>
+                    </div>
+
+                    <!-- Item 4 -->
+                    <div class="bg-brand-card border border-brand-border rounded-xl overflow-hidden transition-all duration-200">
+                        <button onclick="toggleFaq(this)" class="w-full p-6 text-left font-bold text-white flex justify-between items-center focus:outline-none">
+                            <span>Os códigos fontes dos jogos estão inclusos?</span>
+                            <i class="fa-solid fa-chevron-down text-brand-green transition-transform duration-300"></i>
+                        </button>
+                        <div class="faq-content hidden px-6 pb-6 text-slate-300 text-sm leading-relaxed border-t border-brand-border/40 pt-4">
+                            Sim! Além da explicação passo a passo no livro, você recebe as pastas completas com o código final organizado e pronto para rodar e modificar como desejar.
+                        </div>
+                    </div>
+
+                    <!-- Item 5 -->
+                    <div class="bg-brand-card border border-brand-border rounded-xl overflow-hidden transition-all duration-200">
+                        <button onclick="toggleFaq(this)" class="w-full p-6 text-left font-bold text-white flex justify-between items-center focus:outline-none">
+                            <span>Posso vender os jogos que eu criar a partir do e-book?</span>
+                            <i class="fa-solid fa-chevron-down text-brand-green transition-transform duration-300"></i>
+                        </button>
+                        <div class="faq-content hidden px-6 pb-6 text-slate-300 text-sm leading-relaxed border-t border-brand-border/40 pt-4">
+                            Com certeza! O conhecimento adquirido é 100% seu. Você pode publicar seus jogos em plataformas como Itch.io, Steam ou personalizá-los para criar seu portfólio.
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 border-t border-brand-border py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
+            <div>
+                <a href="#" class="font-display font-extrabold text-lg text-white">PYGAME<span class="text-brand-green">.MASTERY</span></a>
+                <p class="text-xs text-slate-500 mt-1">© 2026 Pygame Mastery. Todos os direitos reservados.</p>
+            </div>
+            
+            <div class="flex items-center gap-6 text-xs text-slate-400">
+                <a href="#" class="hover:text-brand-green transition-colors">Termos de Uso</a>
+                <a href="#" class="hover:text-brand-green transition-colors">Políticas de Privacidade</a>
+                <a href="#" class="hover:text-brand-green transition-colors">Contato</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT DE INTERATIVIDADE -->
+    <script>
+        // Função para abrir/fechar o acordeão de FAQ
+        function toggleFaq(button) {
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('i');
+
+            // Toggle visibility
+            content.classList.toggle('hidden');
+            
+            // Rotate icon
+            if (content.classList.contains('hidden')) {
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // Simulação de clique de compra segura
+        function simularCompra() {
+            // Em produção aqui entraria o link da Hotmart/Kiwify/Eduzz
+            const checkoutBox = document.createElement('div');
+            checkoutBox.className = 'fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4';
+            checkoutBox.innerHTML = `
+                <div class="bg-brand-card border border-brand-green p-8 rounded-2xl max-w-md w-full text-center space-y-4 shadow-neon-green">
+                    <div class="w-16 h-16 bg-brand-green/20 text-brand-green rounded-full flex items-center justify-center mx-auto text-3xl">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white">Redirecionando para Checkout</h3>
+                    <p class="text-slate-300 text-sm">Esta é uma demonstração de Landing Page. Em um ambiente real, você seria direcionado para a plataforma de pagamento (Hotmart, Kiwify, etc.).</p>
+                    <button onclick="this.parentElement.parentElement.remove()" class="w-full py-3 bg-brand-green text-brand-dark font-bold rounded-xl hover:bg-emerald-300 transition-colors">
+                        Fechar Demonstração
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(checkoutBox);
+        }
+    </script>
+</body>
+</html>
